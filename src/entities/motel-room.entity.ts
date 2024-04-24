@@ -8,17 +8,21 @@ import {
 import { Base } from './base.entity';
 import { Device } from './device.entity';
 import { Floor } from './floor.entity';
+import { User } from './user.entity';
 
 @Entity()
-export class Room extends Base {
+export class MotelRoom extends Base {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
-  acreage: number;
+  minPrice: number;
 
   @Column()
-  status: string;
+  maxPrice: number;
+
+  @Column()
+  contactPhone: string;
 
   @Column()
   price: number;
@@ -29,12 +33,9 @@ export class Room extends Base {
   @Column()
   description: string;
 
-  @Column()
-  roomPassword: string;
+  @OneToMany((type) => Floor, (floor) => floor.motelRoom)
+  floor: Floor[];
 
-  @OneToMany((type) => Device, (device) => device.room)
-  devices: Device[];
-
-  @ManyToOne(() => Floor, (floor) => floor.rooms)
-  floor: Floor;
+  @ManyToOne(() => User, (user) => user.motelRooms)
+  owner: User;
 }

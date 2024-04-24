@@ -8,5 +8,7 @@ export interface IDatabase {
 
 export interface IEnv {
   port: number;
+  version: string;
+  tbeBaseUrl: string;
   database: IDatabase;
 }

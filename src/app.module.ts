@@ -10,6 +10,7 @@ import { classes } from '@automapper/classes';
   imports: [
     ConfigModule.forRoot({
       load: [envConfiguration],
+      isGlobal: true,
     }),
     AutomapperModule.forRoot({
       strategyInitializer: classes(),

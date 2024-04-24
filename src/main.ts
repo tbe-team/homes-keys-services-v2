@@ -5,11 +5,11 @@ import { Logger } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.setGlobalPrefix('/api/v1.0.0');
   const configService = app.get(ConfigService);
-
   const port = configService.get<number>('port');
-  Logger.log(`Application is running on port = ${port}`);
+  const version = configService.get<string>('version');
+  app.setGlobalPrefix(`/api/${version}`);
   await app.listen(port);
+  Logger.log(`Application is running on port = ${port}`);
 }
 bootstrap();
