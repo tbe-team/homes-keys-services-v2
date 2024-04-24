@@ -2,6 +2,8 @@ import { IEnv } from '@/interfaces';
 
 export const envConfiguration = (): IEnv => ({
   port: parseInt(process.env.PORT, 10) || 3000,
+  version: process.env.APP_VERSION,
+  tbeBaseUrl: process.env.TBE_BASE_URL,
   database: {
     host: process.env.MYSQL_HOST || 'localhost',
     port: Number.parseInt(process.env.MYSQL_PORT) || 3306,

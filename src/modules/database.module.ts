@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Device, Room } from '@/entities';
+import { Device, Floor, MotelRoom, Room, User } from '@/entities';
 
 @Module({
   imports: [
@@ -16,7 +16,7 @@ import { Device, Room } from '@/entities';
         password: configService.get<string>('DATABASE_PASSWORD'),
         database: configService.get<string>('DATABASE_NAME'),
         // entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        entities: [Room, Device],
+        entities: [Room, Device, Floor, MotelRoom, User],
         synchronize: true,
       }),
       inject: [ConfigService],

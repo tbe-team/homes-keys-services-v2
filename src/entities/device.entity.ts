@@ -1,11 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne, PrimaryColumn } from 'typeorm';
 import { AutoMap } from '@automapper/classes';
 import { Room } from './room.entity';
+import { Base } from './base.entity';
 
 @Entity()
-export class Device {
+export class Device extends Base {
   @AutoMap()
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn('uuid')
   id: string;
 
   @AutoMap()
@@ -14,10 +15,10 @@ export class Device {
 
   @AutoMap()
   @Column()
-  type: number;
+  type: string;
 
   @AutoMap()
-  @Column()
+  @Column({ nullable: true })
   description: string;
 
   @AutoMap()
@@ -26,4 +27,11 @@ export class Device {
 
   @ManyToOne(() => Room, (room) => room.devices)
   room: Room;
+
+  @AutoMap()
+  @Column()
+  isGateway: boolean;
+
+  @Column({ nullable: true })
+  location: string;
 }
