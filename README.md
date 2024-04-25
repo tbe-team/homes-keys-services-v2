@@ -28,11 +28,27 @@
 
 ## Installation
 
+### [Install mysql](https://dev.mysql.com/downloads/installer/)
+
+### Create database in mysql
+
 ```bash
 $ npm install
 ```
 
 ## Running the app
+
+### Create `.env` file in root folder
+
+```bash
+DATABASE_HOST=localhost
+DATABASE_PORT=3306
+DATABASE_NAME=homekey_services_dev
+DATABASE_USER=root
+DATABASE_PASSWORD=201102
+APP_VERSION=v1.0.0
+TBE_BASE_URL=http://192.168.1.183:8000/api
+```
 
 ```bash
 # development
