@@ -10,5 +10,6 @@ export interface IEnv {
   port: number;
   version: string;
   tbeBaseUrl: string;
+  tbeAccessToken: string;
   database: IDatabase;
 }

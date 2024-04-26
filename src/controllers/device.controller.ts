@@ -9,26 +9,33 @@ import {
   UseFilters,
   Query,
   Logger,
+  HttpStatus,
 } from '@nestjs/common';
-import { HttpExceptionFilter } from '@/filters';
 import { DeviceService } from '@/services/device.service';
 import { DeviceDto } from '@/dto';
+import { IBaseResponse } from '@/interfaces';
 
-@Controller('devices')
-@UseFilters(new HttpExceptionFilter())
+@Controller('/devices')
 export class DeviceController {
   constructor(private deviceService: DeviceService) {}
 
   @Get()
-  async findAllDevices(): Promise<DeviceDto[]> {
-    return await this.deviceService.findAll();
+  async findAllDevices(): Promise<IBaseResponse<DeviceDto[]>> {
+    const devices: DeviceDto[] = await this.deviceService.findAll();
+    const response: IBaseResponse<DeviceDto[]> = {
+      message: 'Get all devices sucessfully',
+      statusCode: HttpStatus.OK,
+      data: devices,
+    };
+    return response;
   }
 
-  @Get('sync')
-  async syncDevicesByLocation(@Query('locations') locations: string) {
-    Logger.log(`{ Locations: ${locations} }`);
-    this.deviceService.syncDevicesByLocations(locations);
-    return 'oke';
-    // return new Promise((reslove) => reslove('ok'));
+  @Get('/sync')
+  async syncDevicesByLocation(
+    @Query('location') location: string,
+    @Query('pageSize') pageSize: string,
+    @Query('page') page: string,
+  ): Promise<IBaseResponse<void>> {
+    return this.deviceService.syncDevicesByLocation(location, pageSize, page);
   }
 }
