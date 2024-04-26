@@ -1,7 +1,7 @@
 import { IEnv } from '@/interfaces';
 
 export const envConfiguration = (): IEnv => ({
-  port: parseInt(process.env.PORT, 10) || 3000,
+  port: parseInt(process.env.PORT, 10) || 3001,
   version: process.env.APP_VERSION,
   tbeBaseUrl: process.env.TBE_BASE_URL,
   database: {

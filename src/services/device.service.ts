@@ -8,11 +8,12 @@ import { InjectMapper } from '@automapper/nestjs';
 import { BadRequestException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom, Observable } from 'rxjs';
-import { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import { HttpStatus } from '@nestjs/common/enums';
 import { DeviceStatus, DeviceType } from '@/enums';
 import { Logger } from '@nestjs/common/services';
 import { ConfigService } from '@nestjs/config';
+import { IBaseResponse } from '@/interfaces';
 
 interface IDevice {
   id: string;
@@ -43,16 +44,36 @@ export class DeviceService {
         DeviceDto,
       );
     } catch (ex) {
-      throw new BadRequestException(ex);
+      throw new BadRequestException();
     }
   }
 
-  async syncDevicesByLocations(locations: string) {
-    const url = `${this.tbeBaseUrl}/devices?tags=${locations}&page_size=100&page=1`;
-    Logger.log(`{ Url: ${url} }`);
-    const res: AxiosResponse<{ items: IDevice[] }, any> = await firstValueFrom(
-      this.httpService.get(url),
-    );
+  async syncDevicesByLocation(
+    location: string,
+    pageSize: string,
+    page: string,
+  ): Promise<IBaseResponse<void>> {
+    // Fetching data
+    const requestUrl = `${this.tbeBaseUrl}/devices?tags=${location}&page_size=${pageSize}&page=${page}`;
+    const accessToken = this.configService.get('accessToken') || '';
+    let res: AxiosResponse<{ items: IDevice[] }, any> = null;
+    Logger.log(`{ Request url: ${requestUrl} }`);
+    try {
+      res = await firstValueFrom(
+        this.httpService.get(requestUrl, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }),
+      );
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        Logger.error(`{ Error when fetching devices: ${error.message} }`);
+      }
+      throw new BadRequestException(error);
+    }
+
+    // Validate & save data
     if (res.status === HttpStatus.OK) {
       const devices: Device[] = res.data.items.map((item) => {
         const device = new Device();
@@ -65,9 +86,14 @@ export class DeviceService {
         return device;
       });
       this.deviceRepository.save(devices);
-      Logger.log('Save all devices successfully');
+      Logger.log('{ Save all devices successfully }');
     } else {
-      Logger.error('Something went wrong');
+      Logger.log(`{ Error when fetching devices }`);
     }
+    return {
+      message: 'Save all devices successfully',
+      statusCode: HttpStatus.OK,
+      error: false,
+    };
   }
 }
