@@ -12,6 +12,7 @@ import { RoomService } from '@/services/room.service';
 import { Request } from 'express';
 import { HttpExceptionFilter } from '@/filters';
 import { BadRequestException } from '@nestjs/common';
+import { Body } from '@nestjs/common/decorators/http';
 
 @Controller('/rooms')
 @UseFilters(new HttpExceptionFilter())
@@ -20,6 +21,11 @@ export class RoomController {
 
   @Get()
   findAll(@Req() req: Request): string {
-    throw new BadRequestException();
+    throw new BadRequestException([{ errorCode: 403, errorMessage: 'hello' }]);
   }
+
+  // @Post()
+  // createRoom(@Body() ) {
+
+  // }
 }

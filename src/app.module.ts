@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { RoomModule } from '@/modules/room.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { envConfiguration } from './configurations';
-import { DatabaseModule, DeviceModule } from './modules';
+import { DatabaseModule, DeviceModule, MotelRoomModule } from './modules';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
 
@@ -18,6 +18,7 @@ import { classes } from '@automapper/classes';
     DatabaseModule,
     RoomModule,
     DeviceModule,
+    MotelRoomModule,
   ],
 })
 export class AppModule {}

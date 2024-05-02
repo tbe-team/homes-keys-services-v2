@@ -1,18 +1,6 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
-  Req,
-  Res,
-  UseFilters,
-  Query,
-  Logger,
-  HttpStatus,
-} from '@nestjs/common';
+import { Controller, Get, Query, HttpStatus } from '@nestjs/common';
 import { DeviceService } from '@/services/device.service';
-import { DeviceDto } from '@/dto';
+import { DeviceDto } from '@/dto/response';
 import { IBaseResponse } from '@/interfaces';
 
 @Controller('/devices')
@@ -25,6 +13,7 @@ export class DeviceController {
     const response: IBaseResponse<DeviceDto[]> = {
       message: 'Get all devices sucessfully',
       statusCode: HttpStatus.OK,
+      error: false,
       data: devices,
     };
     return response;

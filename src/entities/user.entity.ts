@@ -7,7 +7,6 @@ import {
 } from 'typeorm';
 import { Base } from './base.entity';
 import { MotelRoom } from './motel-room.entity';
-import { Room } from './room.entity';
 
 @Entity()
 export class User extends Base {
