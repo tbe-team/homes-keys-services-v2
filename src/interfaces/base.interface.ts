@@ -4,11 +4,12 @@ export interface IBaseResponse<T> {
   timestamp?: string;
   path?: string;
   statusCode: number;
-  error?: boolean;
+  error: boolean;
   errors?: IBaseErrorResponse[];
+  method?: string;
 }
 
 export interface IBaseErrorResponse {
-  errorCode: string;
+  errorCode: number;
   errorMessage: string;
 }

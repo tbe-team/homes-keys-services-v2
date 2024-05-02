@@ -1,4 +1,4 @@
-import { DeviceDto } from '@/dto';
+import { DeviceDto } from '@/dto/response';
 import { Device } from '@/entities';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -44,6 +44,7 @@ export class DeviceService {
         DeviceDto,
       );
     } catch (ex) {
+      Logger.error(ex);
       throw new BadRequestException();
     }
   }
