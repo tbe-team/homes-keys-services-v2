@@ -5,6 +5,8 @@ import { Logger } from '@nestjs/common';
 import { HttpExceptionFilter } from './filters';
 import { ValidationPipe } from '@nestjs/common/pipes';
 import { IValidationPipeOptions } from './interfaces';
+import * as cookieParser from 'cookie-parser';
+import * as csurf from 'csurf';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,12 +16,16 @@ async function bootstrap() {
   const validationPipeOptions: IValidationPipeOptions = {
     transform: true,
   };
+
   // Config
+  // app.enableCors({ origin: '*' });
   app.setGlobalPrefix(`/api/${version}`);
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalPipes(new ValidationPipe(validationPipeOptions));
+  app.use(cookieParser());
+  // app.use(csurf());
 
   await app.listen(port);
-  Logger.log(`Application is running on port = ${port}`);
+  Logger.log(`[Application] is running on port = ${port}`);
 }
 bootstrap();

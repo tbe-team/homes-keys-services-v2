@@ -1,7 +1,7 @@
-import { Controller, Post, Body, BadRequestException } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { CreateMotelRoomRequestDto } from '@/dto/request';
 import { MotelRoomService } from '@/services';
-import { IBaseErrorResponse, IBaseResponse } from '@/interfaces';
+import { IBaseResponse } from '@/interfaces';
 
 @Controller('/motels')
 export class MotelRoomController {

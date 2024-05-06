@@ -13,7 +13,7 @@ import { HttpStatus } from '@nestjs/common/enums';
 import { DeviceStatus, DeviceType } from '@/enums';
 import { Logger } from '@nestjs/common/services';
 import { ConfigService } from '@nestjs/config';
-import { IBaseResponse } from '@/interfaces';
+import { IBaseResponse, IDeviceService } from '@/interfaces';
 
 interface IDevice {
   id: string;
@@ -25,8 +25,10 @@ interface IDevice {
 }
 
 @Injectable()
-export class DeviceService {
+export class DeviceService implements IDeviceService {
   private readonly tbeBaseUrl = this.configService.get<string>('tbeBaseUrl');
+  private readonly logger = new Logger(DeviceService.name);
+
   constructor(
     @InjectRepository(Device)
     private readonly deviceRepository: Repository<Device>,
@@ -44,7 +46,7 @@ export class DeviceService {
         DeviceDto,
       );
     } catch (ex) {
-      Logger.error(ex);
+      this.logger.error(ex);
       throw new BadRequestException();
     }
   }
@@ -58,7 +60,8 @@ export class DeviceService {
     const requestUrl = `${this.tbeBaseUrl}/devices?tags=${location}&page_size=${pageSize}&page=${page}`;
     const accessToken = this.configService.get('accessToken') || '';
     let res: AxiosResponse<{ items: IDevice[] }, any> = null;
-    Logger.log(`{ Request url: ${requestUrl} }`);
+    this.logger.log(`{ Request url: ${requestUrl} }`);
+
     try {
       res = await firstValueFrom(
         this.httpService.get(requestUrl, {
@@ -69,7 +72,7 @@ export class DeviceService {
       );
     } catch (error) {
       if (error instanceof AxiosError) {
-        Logger.error(`{ Error when fetching devices: ${error.message} }`);
+        this.logger.error(`{ Error when fetching devices: ${error.message} }`);
       }
       throw new BadRequestException(error);
     }
@@ -87,9 +90,9 @@ export class DeviceService {
         return device;
       });
       this.deviceRepository.save(devices);
-      Logger.log('{ Save all devices successfully }');
+      this.logger.log('{ Save all devices successfully }');
     } else {
-      Logger.log(`{ Error when fetching devices }`);
+      this.logger.log(`{ Error when fetching devices }`);
     }
     return {
       message: 'Save all devices successfully',

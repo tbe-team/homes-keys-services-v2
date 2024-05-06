@@ -16,6 +16,8 @@ interface IHttpErrorResponse {
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
+  private readonly logger = new Logger(HttpExceptionFilter.name);
+
   private handlGetErrors(response: object | string): IBaseErrorResponse[] {
     let errors: IBaseErrorResponse[] = [];
 
@@ -40,7 +42,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const status = exception.getStatus();
 
     // Logging error
-    Logger.error(`{ Error when starting on ${request.url} path }`);
+    this.logger.error(`{ Error when starting on ${request.url} path }`);
     console.log(exception.getResponse());
 
     const errorResponse: IBaseResponse<void> = {
