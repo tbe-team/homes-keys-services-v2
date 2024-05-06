@@ -13,7 +13,7 @@ import { HttpStatus } from '@nestjs/common/enums';
 import { DeviceStatus, DeviceType } from '@/enums';
 import { Logger } from '@nestjs/common/services';
 import { ConfigService } from '@nestjs/config';
-import { IBaseResponse, IDeviceService } from '@/interfaces';
+import { IBaseResponse, IDataResponse, IDeviceService } from '@/interfaces';
 
 interface IDevice {
   id: string;
@@ -26,8 +26,9 @@ interface IDevice {
 
 @Injectable()
 export class DeviceService implements IDeviceService {
-  private readonly tbeBaseUrl = this.configService.get<string>('tbeBaseUrl');
-  private readonly logger = new Logger(DeviceService.name);
+  private tbeBaseUrl: string;
+  private logger: Logger;
+  private accessToken: string;
 
   constructor(
     @InjectRepository(Device)
@@ -36,7 +37,48 @@ export class DeviceService implements IDeviceService {
     private readonly mapper: Mapper,
     private readonly httpService: HttpService,
     private configService: ConfigService,
-  ) {}
+  ) {
+    this.tbeBaseUrl = this.configService.get<string>('tbeBaseUrl') || '';
+    this.logger = new Logger(DeviceService.name);
+    this.accessToken = this.configService.get<string>('tbeAccessToken') || '';
+  }
+
+  async getDataFromStartDateToEndDate(
+    id: string,
+    startDate: string,
+    endDate: string,
+    intervalType: string,
+  ): Promise<IBaseResponse<IDataResponse[]>> {
+    const key = encodeURIComponent('Total kWh');
+    const interval = 1;
+    const aggType = 'MAX';
+    const limit = 100;
+    const formatedStartDate = encodeURIComponent(`${startDate}T00:00:00+07:00`);
+    const formatedEndDate = encodeURIComponent(`${endDate}T23:59:59+07:00`);
+
+    const requestUrl = `${this.tbeBaseUrl}/telemetry/metrics/values?device_id=${id}&key=${key}&start=${formatedStartDate}&end=${formatedEndDate}&interval_type=${intervalType}&interval=${interval}&agg_type=${aggType}&limit=${limit}`;
+    this.logger.log({ requestUrl });
+
+    try {
+      const response: IDataResponse[] = await firstValueFrom(
+        this.httpService.get(requestUrl, {
+          headers: {
+            Accept: 'application/json',
+            'X-API-Key': this.accessToken,
+          },
+        }),
+      ).then((data) => data.data);
+
+      return {
+        message: 'Get all data from start date to end date successfully',
+        statusCode: HttpStatus.OK,
+        error: false,
+        data: response,
+      };
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
 
   async findAll(): Promise<DeviceDto[]> {
     try {
@@ -58,7 +100,6 @@ export class DeviceService implements IDeviceService {
   ): Promise<IBaseResponse<void>> {
     // Fetching data
     const requestUrl = `${this.tbeBaseUrl}/devices?tags=${location}&page_size=${pageSize}&page=${page}`;
-    const accessToken = this.configService.get('accessToken') || '';
     let res: AxiosResponse<{ items: IDevice[] }, any> = null;
     this.logger.log(`{ Request url: ${requestUrl} }`);
 
@@ -66,7 +107,8 @@ export class DeviceService implements IDeviceService {
       res = await firstValueFrom(
         this.httpService.get(requestUrl, {
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Accept: 'application/json',
+            'X-API-Key': this.accessToken,
           },
         }),
       );

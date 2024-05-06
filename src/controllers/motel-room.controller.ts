@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Get } from '@nestjs/common';
 import { CreateMotelRoomRequestDto } from '@/dto/request';
 import { MotelRoomService } from '@/services';
 import { IBaseResponse } from '@/interfaces';

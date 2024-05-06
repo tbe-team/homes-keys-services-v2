@@ -9,4 +9,16 @@ export interface IDeviceService {
     pageSize: string,
     page: string,
   ): Promise<IBaseResponse<void>>;
+
+  getDataFromStartDateToEndDate(
+    id: string,
+    startDate: string,
+    endDate: string,
+    intervalType: string,
+  ): Promise<IBaseResponse<IDataResponse[]>>;
+}
+
+export interface IDataResponse {
+  ts: string;
+  value: number | null;
 }

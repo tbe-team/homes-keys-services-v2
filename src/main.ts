@@ -6,7 +6,6 @@ import { HttpExceptionFilter } from './filters';
 import { ValidationPipe } from '@nestjs/common/pipes';
 import { IValidationPipeOptions } from './interfaces';
 import * as cookieParser from 'cookie-parser';
-import * as csurf from 'csurf';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
