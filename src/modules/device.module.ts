@@ -7,9 +7,10 @@ import { RoomService } from '@/services';
 import { DeviceService } from '@/services/device.service';
 import { DeviceProfile } from '@/profiles';
 import { HttpModule } from '@nestjs/axios';
+import { RoomModule } from './room.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Device]), HttpModule],
+  imports: [TypeOrmModule.forFeature([Device, Room]), HttpModule],
   providers: [DeviceService, DeviceProfile],
   controllers: [DeviceController],
   exports: [DeviceService],

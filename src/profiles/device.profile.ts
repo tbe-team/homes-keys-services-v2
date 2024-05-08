@@ -3,6 +3,7 @@ import { createMap, Mapper, typeConverter } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
 import { Device } from '@/entities';
 import { DeviceDto } from '@/dto/response';
+import { CreateDeviceDto } from '@/dto/request';
 const moment = require('moment');
 
 @Injectable()
@@ -21,6 +22,7 @@ export class DeviceProfile extends AutomapperProfile {
           return moment(date).format('DD/MM/YYYY HH:mm:ss');
         }),
       );
+      createMap(mapper, CreateDeviceDto, Device);
     };
   }
 }
