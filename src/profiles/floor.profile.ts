@@ -1,8 +1,8 @@
 import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
 import { createMap, Mapper, typeConverter } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
-import { MotelRoom } from '@/entities';
-import { MotelRoomDto } from '@/dto/response';
+import { Floor, MotelRoom, Room } from '@/entities';
+import { FloorReponseDto, MotelRoomDto, RoomResponseDto } from '@/dto/response';
 import { CreateMotelRoomRequestDto } from '@/dto/request';
 const moment = require('moment');
 
@@ -15,7 +15,17 @@ export class FloorProfile extends AutomapperProfile {
   override get profile() {
     return (mapper: Mapper) => {
       // Request to entity
-      // createMap(mapper, , MotelRoom);
+      createMap(
+        mapper,
+        Floor,
+        FloorReponseDto,
+        typeConverter(Room, RoomResponseDto, async (room: Room) => {
+          return await mapper.mapAsync(room, Room, RoomResponseDto);
+        }),
+        // typeConverter(MotelRoom, MotelRoomDto, async (motelRoom) => {
+        //   return await mapper.mapAsync(motelRoom, MotelRoom, MotelRoomDto);
+        // }),
+      );
       // Entity to response
     };
   }

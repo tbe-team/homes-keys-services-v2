@@ -25,6 +25,7 @@ export class Device extends Base {
   @Column()
   status: 'activated' | 'deactivate';
 
+  @AutoMap()
   @ManyToOne(() => Room, (room) => room.devices)
   room: Room;
 

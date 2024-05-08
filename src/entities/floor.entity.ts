@@ -1,3 +1,4 @@
+import { AutoMap } from '@automapper/classes';
 import {
   Entity,
   Column,
@@ -12,20 +13,26 @@ import { Room } from './room.entity';
 @Entity()
 export class Floor extends Base {
   @PrimaryGeneratedColumn('uuid')
+  @AutoMap()
   id: string;
 
   @Column()
+  @AutoMap()
   key: string;
 
   @Column()
+  @AutoMap()
   name: string;
 
   @Column()
+  @AutoMap()
   description: string;
 
   @OneToMany((type) => Room, (room) => room.floor)
+  @AutoMap()
   rooms: Room[];
 
   @ManyToOne(() => MotelRoom, (motelRoom) => motelRoom.floor)
+  @AutoMap()
   motelRoom: MotelRoom;
 }
