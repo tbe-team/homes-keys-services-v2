@@ -1,5 +1,5 @@
 import { DeviceDto } from '@/dto/response';
-import { Device } from '@/entities';
+import { Device, Room } from '@/entities';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -14,6 +14,8 @@ import { DeviceStatus, DeviceType } from '@/enums';
 import { Logger } from '@nestjs/common/services';
 import { ConfigService } from '@nestjs/config';
 import { IBaseResponse, IDataResponse, IDeviceService } from '@/interfaces';
+import { CreateDeviceDto, UpdateDeviceDto } from '@/dto/request';
+import { NotFoundException } from '@nestjs/common/exceptions';
 
 interface IDevice {
   id: string;
@@ -33,6 +35,8 @@ export class DeviceService implements IDeviceService {
   constructor(
     @InjectRepository(Device)
     private readonly deviceRepository: Repository<Device>,
+    @InjectRepository(Room)
+    private readonly roomRepository: Repository<Room>,
     @InjectMapper()
     private readonly mapper: Mapper,
     private readonly httpService: HttpService,
@@ -41,6 +45,79 @@ export class DeviceService implements IDeviceService {
     this.tbeBaseUrl = this.configService.get<string>('tbeBaseUrl') || '';
     this.logger = new Logger(DeviceService.name);
     this.accessToken = this.configService.get<string>('tbeAccessToken') || '';
+  }
+
+  async getDeviceById(id: string): Promise<IBaseResponse<DeviceDto>> {
+    const devive = await this.deviceRepository.findOne({ where: { id } });
+    if (!devive) throw new NotFoundException('Device could not be found');
+    const deviveDto = await this.mapper.mapAsync(devive, Device, DeviceDto);
+    return {
+      data: deviveDto,
+      error: false,
+      message: `Devive ${deviveDto.id} found`,
+      statusCode: HttpStatus.OK,
+    };
+  }
+
+  async updateDevice(
+    requestData: UpdateDeviceDto,
+  ): Promise<IBaseResponse<void>> {
+    const device = await this.deviceRepository.findOne({
+      where: { id: requestData.id },
+    });
+    if (!device) throw new NotFoundException('Device could not be found');
+
+    // device.status = requestData.status;
+    device.name = requestData.name;
+    device.description = requestData.description;
+    device.location = requestData.location;
+    device.isGateway = requestData.isGateway;
+    this.deviceRepository.save(device);
+
+    return {
+      message: 'Update device successfully',
+      statusCode: HttpStatus.OK,
+      error: false,
+    };
+  }
+
+  async deleteDevice(id: string): Promise<IBaseResponse<void>> {
+    const deleteResult = await this.deviceRepository.delete(id);
+    this.logger.log({ deleteResult: deleteResult.affected });
+    return {
+      message: 'Delete device successfully',
+      statusCode: HttpStatus.OK,
+      error: false,
+    };
+  }
+
+  async createDevice(
+    requestData: CreateDeviceDto,
+  ): Promise<IBaseResponse<void>> {
+    // Get room
+    // const room = await this.roomRepository.findOne({
+    //   where: { id: requestData.roomId },
+    // });
+    // if (!room) throw new NotFoundException('Room could not be found');
+
+    // Map request to entity
+    const device = await this.mapper.mapAsync(
+      requestData,
+      CreateDeviceDto,
+      Device,
+    );
+    // device.room = room;
+    this.logger.log({ device });
+
+    // Create device
+    await this.deviceRepository.save(device);
+    this.logger.log(`Create new devive: ${device.id}`);
+
+    return {
+      message: `Create device ${device.id} successfully`,
+      statusCode: HttpStatus.CREATED,
+      error: false,
+    };
   }
 
   async getDataFromStartDateToEndDate(
@@ -132,7 +209,7 @@ export class DeviceService implements IDeviceService {
         return device;
       });
       this.deviceRepository.save(devices);
-      this.logger.log('{ Save all devices successfully }');
+      this.logger.log('{ Sync all devices successfully }');
     } else {
       this.logger.log(`{ Error when fetching devices }`);
     }

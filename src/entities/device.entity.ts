@@ -1,4 +1,4 @@
-import { Entity, Column, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Entity, Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { AutoMap } from '@automapper/classes';
 import { Room } from './room.entity';
 import { Base } from './base.entity';
@@ -6,7 +6,7 @@ import { Base } from './base.entity';
 @Entity()
 export class Device extends Base {
   @AutoMap()
-  @PrimaryColumn('uuid')
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @AutoMap()
@@ -25,6 +25,7 @@ export class Device extends Base {
   @Column()
   status: 'activated' | 'deactivate';
 
+  @AutoMap()
   @ManyToOne(() => Room, (room) => room.devices)
   room: Room;
 

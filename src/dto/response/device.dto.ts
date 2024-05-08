@@ -1,4 +1,5 @@
 import { AutoMap } from '@automapper/classes';
+import { RoomResponseDto } from './room-response.dto';
 export class DeviceDto {
   @AutoMap()
   id: string;
@@ -23,4 +24,7 @@ export class DeviceDto {
 
   @AutoMap()
   isGateway: boolean;
+
+  @AutoMap()
+  room: RoomResponseDto;
 }
