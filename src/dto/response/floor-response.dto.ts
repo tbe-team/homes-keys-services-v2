@@ -18,6 +18,12 @@ export class FloorReponseDto {
   @AutoMap()
   rooms: RoomResponseDto[];
 
+  // @AutoMap()
+  // motelRoom: MotelRoomDto;
+
   @AutoMap()
-  motelRoom: MotelRoomDto;
+  createdAt: string; // Creation date
+
+  @AutoMap()
+  updatedAt: string; // Last updated date
 }

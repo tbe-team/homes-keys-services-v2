@@ -3,7 +3,7 @@ import { createMap, Mapper, typeConverter } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
 import { MotelRoom, Room } from '@/entities';
 import { MotelRoomDto, RoomResponseDto } from '@/dto/response';
-import { CreateMotelRoomRequestDto } from '@/dto/request';
+import { CreateMotelRoomRequestDto, CreateRoomRequestDto } from '@/dto/request';
 const moment = require('moment');
 
 @Injectable()
@@ -16,6 +16,7 @@ export class RoomProfile extends AutomapperProfile {
     return (mapper: Mapper) => {
       // Request to entity
       createMap(mapper, Room, RoomResponseDto);
+      createMap(mapper, CreateRoomRequestDto, Room);
       // Entity to response
     };
   }

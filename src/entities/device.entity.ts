@@ -25,7 +25,7 @@ export class Device extends Base {
   @Column()
   status: 'activated' | 'deactivate';
 
-  @AutoMap()
+  @AutoMap(() => Room)
   @ManyToOne(() => Room, (room) => room.devices)
   room: Room;
 
@@ -34,5 +34,6 @@ export class Device extends Base {
   isGateway: boolean;
 
   @Column({ nullable: true })
+  @AutoMap()
   location: string;
 }

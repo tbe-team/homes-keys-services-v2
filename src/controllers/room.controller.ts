@@ -1,7 +1,8 @@
-import { Controller, Get, Req } from '@nestjs/common';
+import { Controller, Get, Req, Post, Body } from '@nestjs/common';
 import { RoomService } from '@/services/room.service';
 import { Request } from 'express';
 import { BadRequestException } from '@nestjs/common';
+import { CreateRoomRequestDto } from '@/dto/request';
 
 @Controller('/rooms')
 export class RoomController {
@@ -12,8 +13,8 @@ export class RoomController {
     throw new BadRequestException([{ errorCode: 403, errorMessage: 'hello' }]);
   }
 
-  // @Post()
-  // createRoom(@Body() ) {
-
-  // }
+  @Post()
+  createRoom(@Body() requestData: CreateRoomRequestDto) {
+    return this.roomServive.createRoom(requestData);
+  }
 }

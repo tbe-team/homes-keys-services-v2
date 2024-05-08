@@ -36,11 +36,11 @@ export class FloorController {
 
   @Put()
   async updateFloor(@Body() requestData: UpdateFloorRequestDto) {
-    return null;
+    return this.floorService.updateFloor(requestData);
   }
 
   @Delete()
   async deleteFloor(@Param() params: { id: string }) {
-    return null;
+    return this.floorService.deleteFloor(params.id);
   }
 }

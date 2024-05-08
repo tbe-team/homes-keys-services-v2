@@ -3,3 +3,4 @@ export * from './create-motel-room-request.dto';
 export * from './create-device-request.dto';
 export * from './update-device-request.dto';
 export * from './update-floor-request.dto';
+export * from './create-room-request.dto';

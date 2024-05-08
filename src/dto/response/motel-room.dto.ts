@@ -1,27 +1,23 @@
 import { AutoMap } from '@automapper/classes';
+import { FloorReponseDto } from './floor-response.dto';
 
 export class MotelRoomDto {
   @AutoMap()
   id: string;
-
+  @AutoMap()
+  minPrice: number;
+  @AutoMap()
+  maxPrice: number;
+  @AutoMap()
+  contactPhone: string;
+  @AutoMap()
+  price: number;
   @AutoMap()
   name: string;
-
-  @AutoMap()
-  type: number;
-
   @AutoMap()
   description: string;
-
   @AutoMap()
-  status: string;
-
-  @AutoMap()
-  createdAt: string; // Creation date
-
-  @AutoMap()
-  updatedAt: string; // Last updated date
-
-  @AutoMap()
-  isGateway: boolean;
+  floor: FloorReponseDto[];
+  // @AutoMap()
+  // owner: User;
 }

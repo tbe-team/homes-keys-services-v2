@@ -1,5 +1,5 @@
 import { FloorReponseDto } from '@/dto/response';
-import { Floor } from '@/entities';
+import { Floor, MotelRoom } from '@/entities';
 import { IBaseResponse, IFloorService } from '@/interfaces';
 import { Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
@@ -17,6 +17,8 @@ export class FloorService implements IFloorService {
   constructor(
     @InjectRepository(Floor)
     private readonly floorRepository: Repository<Floor>,
+    @InjectRepository(MotelRoom)
+    private readonly motelRoomRepository: Repository<MotelRoom>,
     @InjectMapper()
     private readonly mapper: Mapper,
   ) {
@@ -36,10 +38,27 @@ export class FloorService implements IFloorService {
     };
   }
 
-  createFloor(
+  async createFloor(
     requestData: CreateFloorRequestDto,
   ): Promise<IBaseResponse<void>> {
-    throw new Error('Method not implemented.');
+    // const motelRoom = await this.motelRoomRepository.findOne({
+    //   where: { id: requestData.motelRoomId },
+    // });
+    // if (!motelRoom)
+    //   throw new NotFoundException('Motel room could not be found');
+
+    const floor = await this.mapper.mapAsync(
+      requestData,
+      CreateFloorRequestDto,
+      Floor,
+    );
+    // ( floor).motelRoom = motelRoom;
+    await this.floorRepository.save(floor);
+    return {
+      error: false,
+      message: `Floor ${floor.id} created successfully`,
+      statusCode: HttpStatus.OK,
+    };
   }
 
   updateFloor(
