@@ -1,7 +1,7 @@
-import { Controller, Get, Query, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Query, HttpStatus, Param } from '@nestjs/common';
 import { DeviceService } from '@/services/device.service';
 import { DeviceDto } from '@/dto/response';
-import { IBaseResponse } from '@/interfaces';
+import { IBaseResponse, IDataResponse } from '@/interfaces';
 
 @Controller('/devices')
 export class DeviceController {
@@ -26,5 +26,24 @@ export class DeviceController {
     @Query('page') page: string,
   ): Promise<IBaseResponse<void>> {
     return this.deviceService.syncDevicesByLocation(location, pageSize, page);
+  }
+
+  // Get data from startDate to endDate with interval type
+  // StartDate format: 2023-10-03
+  // EndDate format: 2023-10-04
+  // Interval type format: DAY, HOUR, MINUTE, SECOND
+  @Get('/:id/dataFromStartDateToEndDate')
+  async getDataFromStartDateToEndDate(
+    @Param() params: { id: string },
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
+    @Query('intervalType') intervalType: string,
+  ): Promise<IBaseResponse<IDataResponse[]>> {
+    return this.deviceService.getDataFromStartDateToEndDate(
+      params.id,
+      startDate,
+      endDate,
+      intervalType,
+    );
   }
 }
