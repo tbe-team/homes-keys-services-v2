@@ -17,12 +17,6 @@ export class DeviceDto {
   status: string;
 
   @AutoMap()
-  createdAt: string; // Creation date
-
-  @AutoMap()
-  updatedAt: string; // Last updated date
-
-  @AutoMap()
   isGateway: boolean;
 
   @AutoMap()

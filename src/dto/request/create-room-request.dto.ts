@@ -1,8 +1,14 @@
 import { AutoMap } from '@automapper/classes';
 
-export class CreateFloorRequestDto {
+export class CreateRoomRequestDto {
   @AutoMap()
-  key: string;
+  acreage: number;
+
+  @AutoMap()
+  status: string;
+
+  @AutoMap()
+  price: number;
 
   @AutoMap()
   name: string;
@@ -11,5 +17,5 @@ export class CreateFloorRequestDto {
   description: string;
 
   @AutoMap()
-  motelRoomId: string;
+  floorId: string;
 }

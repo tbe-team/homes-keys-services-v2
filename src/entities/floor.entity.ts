@@ -28,7 +28,7 @@ export class Floor extends Base {
   @AutoMap()
   description: string;
 
-  @OneToMany((type) => Room, (room) => room.floor)
+  @OneToMany((type) => Room, (room) => room.floor, { eager: true })
   @AutoMap()
   rooms: Room[];
 

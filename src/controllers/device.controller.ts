@@ -30,11 +30,6 @@ export class DeviceController {
     return response;
   }
 
-  @Get('/:id')
-  async getDeviceById(@Param() params: { id: string }) {
-    return this.deviceService.getDeviceById(params.id);
-  }
-
   @Get('/sync')
   async syncDevicesByLocation(
     @Query('location') location: string,
@@ -42,6 +37,11 @@ export class DeviceController {
     @Query('page') page: string,
   ): Promise<IBaseResponse<void>> {
     return this.deviceService.syncDevicesByLocation(location, pageSize, page);
+  }
+
+  @Get('/:id')
+  async getDeviceById(@Param() params: { id: string }) {
+    return this.deviceService.getDeviceById(params.id);
   }
 
   // Get data from startDate to endDate with interval type

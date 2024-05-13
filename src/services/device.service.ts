@@ -50,6 +50,7 @@ export class DeviceService implements IDeviceService {
   async getDeviceById(id: string): Promise<IBaseResponse<DeviceDto>> {
     const devive = await this.deviceRepository.findOne({ where: { id } });
     if (!devive) throw new NotFoundException('Device could not be found');
+    console.log({ room: devive.room, devive });
     const deviveDto = await this.mapper.mapAsync(devive, Device, DeviceDto);
     return {
       data: deviveDto,
@@ -95,10 +96,10 @@ export class DeviceService implements IDeviceService {
     requestData: CreateDeviceDto,
   ): Promise<IBaseResponse<void>> {
     // Get room
-    // const room = await this.roomRepository.findOne({
-    //   where: { id: requestData.roomId },
-    // });
-    // if (!room) throw new NotFoundException('Room could not be found');
+    const room = await this.roomRepository.findOne({
+      where: { id: requestData.roomId },
+    });
+    if (!room) throw new NotFoundException('Room could not be found');
 
     // Map request to entity
     const device = await this.mapper.mapAsync(
@@ -106,7 +107,7 @@ export class DeviceService implements IDeviceService {
       CreateDeviceDto,
       Device,
     );
-    // device.room = room;
+    device.room = room;
     this.logger.log({ device });
 
     // Create device
