@@ -17,6 +17,7 @@ import { IBaseResponse, IDataResponse, IDeviceService } from '@/interfaces';
 import {
   CreateDeviceDto,
   PageOptionsRequest,
+  SyncDeviceOptionRequest,
   UpdateDeviceDto,
 } from '@/dto/request';
 import { NotFoundException } from '@nestjs/common/exceptions';
@@ -195,13 +196,15 @@ export class DeviceService implements IDeviceService {
     }
   }
 
-  async syncDevicesByLocation(
-    location: string,
-    pageSize: string,
-    page: string,
+  async syncDevices(
+    syncDeviceSyncDeviceOptionRequest: SyncDeviceOptionRequest,
   ): Promise<IBaseResponse<void>> {
-    // Fetching data
-    const requestUrl = `${this.tbeBaseUrl}/devices?tags=${location}&page_size=${pageSize}&page=${page}`;
+    // Make query builder
+    let queryBuilder = `page_size=${syncDeviceSyncDeviceOptionRequest.take}&page=${syncDeviceSyncDeviceOptionRequest.page}`;
+    if (syncDeviceSyncDeviceOptionRequest.tags) {
+      queryBuilder += `&tags=${syncDeviceSyncDeviceOptionRequest.tags}`;
+    }
+    const requestUrl = `${this.tbeBaseUrl}/devices?${queryBuilder}`;
     let res: AxiosResponse<{ items: IDevice[] }, any> = null;
     this.logger.log(`{ Request url: ${requestUrl} }`);
 
@@ -218,7 +221,7 @@ export class DeviceService implements IDeviceService {
       if (error instanceof AxiosError) {
         this.logger.error(`{ Error when fetching devices: ${error.message} }`);
       }
-      throw new BadRequestException(error);
+      throw new NotFoundException(error);
     }
 
     // Validate & save data

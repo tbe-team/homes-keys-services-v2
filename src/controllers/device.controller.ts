@@ -17,9 +17,10 @@ import {
   PageOptionsRequest,
   UpdateDeviceDto,
 } from '@/dto/request';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiResponse, ApiParam, getSchemaPath } from '@nestjs/swagger';
 import { HttpStatus } from '@nestjs/common/enums';
 import { ApiPaginatedResponse } from '@/decorators';
+import { SyncDeviceOptionRequest } from '@/dto/request';
 
 @Controller('/devices')
 @ApiTags('Devices API')
@@ -37,15 +38,26 @@ export class DeviceController {
 
   @Get('/sync')
   @HttpCode(HttpStatus.OK)
-  async syncDevicesByLocation(
-    @Query('location') location: string,
-    @Query('pageSize') pageSize: string,
-    @Query('page') page: string,
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Sync device by location successfully',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Request failed with status code 404',
+  })
+  async syncDevices(
+    @Query() syncDeviceSyncDeviceOptionRequest: SyncDeviceOptionRequest,
   ): Promise<IBaseResponse<void>> {
-    return this.deviceService.syncDevicesByLocation(location, pageSize, page);
+    return this.deviceService.syncDevices(syncDeviceSyncDeviceOptionRequest);
   }
 
   @Get('/:id')
+  @ApiParam({ name: 'id', required: true, description: 'Device id' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Sync device by location successfully',
+  })
   @HttpCode(HttpStatus.OK)
   async getDeviceById(@Param() params: { id: string }) {
     return this.deviceService.getDeviceById(params.id);

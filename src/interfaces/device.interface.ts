@@ -1,6 +1,7 @@
 import {
   CreateDeviceDto,
   PageOptionsRequest,
+  SyncDeviceOptionRequest,
   UpdateDeviceDto,
 } from '@/dto/request';
 import { DeviceDto, PageDto } from '@/dto/response';
@@ -11,10 +12,8 @@ export interface IDeviceService {
     pageOptionsRequest: PageOptionsRequest,
   ): Promise<IBaseResponse<PageDto<DeviceDto>>>;
 
-  syncDevicesByLocation(
-    location: string,
-    pageSize: string,
-    page: string,
+  syncDevices(
+    syncDeviceSyncDeviceOptionRequest: SyncDeviceOptionRequest,
   ): Promise<IBaseResponse<void>>;
 
   getDataFromStartDateToEndDate(
