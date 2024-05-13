@@ -6,6 +6,8 @@ import { HttpExceptionFilter } from './filters';
 import { ValidationPipe } from '@nestjs/common/pipes';
 import { IValidationPipeOptions } from './interfaces';
 import * as cookieParser from 'cookie-parser';
+import { SwaggerModule } from '@nestjs/swagger';
+import { swaggerConfiguration } from '@/configurations';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,14 +17,14 @@ async function bootstrap() {
   const validationPipeOptions: IValidationPipeOptions = {
     transform: true,
   };
+  const document = SwaggerModule.createDocument(app, swaggerConfiguration);
 
   // Config
-  // app.enableCors({ origin: '*' });
+  SwaggerModule.setup(`/api/${version}/docs`, app, document);
   app.setGlobalPrefix(`/api/${version}`);
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalPipes(new ValidationPipe(validationPipeOptions));
   app.use(cookieParser());
-  // app.use(csurf());
 
   await app.listen(port);
   Logger.log(`[Application] is running on port = ${port}`);

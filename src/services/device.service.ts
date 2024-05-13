@@ -1,4 +1,4 @@
-import { DeviceDto } from '@/dto/response';
+import { DeviceDto, PageDto, PageMetaDto } from '@/dto/response';
 import { Device, Room } from '@/entities';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,7 +14,11 @@ import { DeviceStatus, DeviceType } from '@/enums';
 import { Logger } from '@nestjs/common/services';
 import { ConfigService } from '@nestjs/config';
 import { IBaseResponse, IDataResponse, IDeviceService } from '@/interfaces';
-import { CreateDeviceDto, UpdateDeviceDto } from '@/dto/request';
+import {
+  CreateDeviceDto,
+  PageOptionsRequest,
+  UpdateDeviceDto,
+} from '@/dto/request';
 import { NotFoundException } from '@nestjs/common/exceptions';
 
 interface IDevice {
@@ -158,13 +162,33 @@ export class DeviceService implements IDeviceService {
     }
   }
 
-  async findAll(): Promise<DeviceDto[]> {
+  async getAllDevices(
+    pageOptionsRequest: PageOptionsRequest,
+  ): Promise<IBaseResponse<PageDto<DeviceDto>>> {
     try {
-      return this.mapper.mapArrayAsync(
-        await this.deviceRepository.find(),
+      const queryBuilder = this.deviceRepository.createQueryBuilder('device');
+      queryBuilder
+        .orderBy('device.createdAt', pageOptionsRequest.orderBy)
+        .skip(pageOptionsRequest.skip)
+        .take(pageOptionsRequest.take);
+      const itemCount = await queryBuilder.getCount();
+      const { entities } = await queryBuilder.getRawAndEntities();
+      const deviceDtos = await this.mapper.mapArrayAsync(
+        entities,
         Device,
         DeviceDto,
       );
+      const pageMetaDto = new PageMetaDto({
+        itemCount,
+        pageOptions: pageOptionsRequest,
+      });
+
+      return {
+        error: false,
+        message: 'Get all devices successfully',
+        statusCode: HttpStatus.OK,
+        data: new PageDto(deviceDtos, pageMetaDto),
+      };
     } catch (ex) {
       this.logger.error(ex);
       throw new BadRequestException();

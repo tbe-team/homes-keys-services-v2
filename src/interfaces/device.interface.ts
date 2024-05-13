@@ -1,9 +1,15 @@
-import { CreateDeviceDto, UpdateDeviceDto } from '@/dto/request';
-import { DeviceDto } from '@/dto/response';
+import {
+  CreateDeviceDto,
+  PageOptionsRequest,
+  UpdateDeviceDto,
+} from '@/dto/request';
+import { DeviceDto, PageDto } from '@/dto/response';
 import { IBaseResponse } from './base.interface';
 
 export interface IDeviceService {
-  findAll(): Promise<DeviceDto[]>;
+  getAllDevices(
+    pageOptionsRequest: PageOptionsRequest,
+  ): Promise<IBaseResponse<PageDto<DeviceDto>>>;
 
   syncDevicesByLocation(
     location: string,

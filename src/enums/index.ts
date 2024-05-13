@@ -7,3 +7,8 @@ export enum DeviceStatus {
   ACTIVATED = 'activated',
   DEACTIVATE = 'deactivate',
 }
+
+export enum OrderBy {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}
