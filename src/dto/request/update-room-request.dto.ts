@@ -1,9 +1,6 @@
 import { AutoMap } from '@automapper/classes';
 
-export class RoomResponseDto {
-  @AutoMap()
-  id: string;
-
+export class UpdateRoomRequestDto {
   @AutoMap()
   acreage: number;
 

@@ -6,10 +6,6 @@ import { Base } from './base.entity';
 @Entity()
 export class Device extends Base {
   @AutoMap()
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @AutoMap()
   @Column()
   name: string;
 

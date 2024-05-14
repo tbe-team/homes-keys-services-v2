@@ -1,21 +1,11 @@
 import { AutoMap } from '@automapper/classes';
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  OneToMany,
-  ManyToOne,
-} from 'typeorm';
+import { Entity, Column, OneToMany, ManyToOne } from 'typeorm';
 import { Base } from './base.entity';
 import { Device } from './device.entity';
 import { Floor } from './floor.entity';
 
 @Entity()
 export class Room extends Base {
-  @PrimaryGeneratedColumn('uuid')
-  @AutoMap()
-  id: string;
-
   @Column()
   @AutoMap()
   acreage: number;

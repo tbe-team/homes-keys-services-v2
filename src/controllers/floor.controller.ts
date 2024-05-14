@@ -10,10 +10,11 @@ import {
   Delete,
   Param,
   Body,
-  Query,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('/floors')
+@ApiTags('Floors API')
 export class FloorController {
   constructor(private floorService: FloorService) {}
 
