@@ -1,5 +1,9 @@
-import { CreateRoomRequestDto, UpdateRoomRequestDto } from '@/dto/request';
-import { RoomResponseDto } from '@/dto/response';
+import {
+  CreateRoomRequestDto,
+  PageOptionsRequest,
+  UpdateRoomRequestDto,
+} from '@/dto/request';
+import { PageDto, PageMetaDto, RoomResponseDto } from '@/dto/response';
 import { Floor } from '@/entities';
 import { Room } from '@/entities/room.entity';
 import { IBaseResponse, IRoomService } from '@/interfaces';
@@ -13,9 +17,12 @@ import {
 import { HttpStatus } from '@nestjs/common/enums';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Logger } from '@nestjs/common/services';
 
 @Injectable()
 export class RoomService implements IRoomService {
+  private logger: Logger;
+
   constructor(
     @InjectRepository(Room)
     private roomRepository: Repository<Room>,
@@ -25,7 +32,9 @@ export class RoomService implements IRoomService {
 
     @InjectMapper()
     private readonly mapper: Mapper,
-  ) {}
+  ) {
+    this.logger = new Logger(RoomService.name);
+  }
 
   async getRoomById(id: string): Promise<IBaseResponse<RoomResponseDto>> {
     const room = await this.roomRepository.findOne({
@@ -78,19 +87,37 @@ export class RoomService implements IRoomService {
     };
   }
 
-  async getAllRooms(): Promise<IBaseResponse<RoomResponseDto[]>> {
-    const rooms = await this.roomRepository.find();
-    const roomDtos = await this.mapper.mapArrayAsync(
-      rooms,
-      Room,
-      RoomResponseDto,
-    );
-    return {
-      error: false,
-      message: 'Get all rooms successfully',
-      statusCode: HttpStatus.OK,
-      data: roomDtos,
-    };
+  async getAllRooms(
+    queries: PageOptionsRequest,
+  ): Promise<IBaseResponse<PageDto<RoomResponseDto>>> {
+    try {
+      const queryBuilder = this.roomRepository.createQueryBuilder('room');
+      queryBuilder
+        .orderBy('room.createdAt', queries.orderBy)
+        .skip(queries.skip)
+        .take(queries.take);
+      const itemCount = await queryBuilder.getCount();
+      const { entities } = await queryBuilder.getRawAndEntities();
+      const rooms = await this.mapper.mapArrayAsync(
+        entities,
+        Room,
+        RoomResponseDto,
+      );
+      const pageMetaDto = new PageMetaDto({
+        itemCount,
+        pageOptions: queries,
+      });
+
+      return {
+        error: false,
+        message: 'Get all rooms successfully',
+        statusCode: HttpStatus.OK,
+        data: new PageDto(rooms, pageMetaDto),
+      };
+    } catch (ex) {
+      this.logger.error(ex);
+      throw new BadRequestException(ex);
+    }
   }
 
   async createRoom(
