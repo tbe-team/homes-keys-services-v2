@@ -1,5 +1,5 @@
-export interface IBaseResponse<T> {
-  data?: T;
+export interface IBaseResponse<TData> {
+  data?: TData;
   message: string;
   timestamp?: string;
   path?: string;
