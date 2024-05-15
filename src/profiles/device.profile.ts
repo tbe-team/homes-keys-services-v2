@@ -11,7 +11,7 @@ import {
 import { Injectable } from '@nestjs/common';
 import { Base, Device, Room } from '@/entities';
 import { BaseResponseDto, DeviceDto, RoomResponseDto } from '@/dto/response';
-import { CreateDeviceDto } from '@/dto/request';
+import { CreateDeviceRequestDto } from '@/dto/request';
 const moment = require('moment');
 
 @Injectable()
@@ -40,7 +40,7 @@ export class DeviceProfile extends AutomapperProfile {
         //   mapWith(Room, RoomResponseDto, (s) => s.room),
         // ),
       );
-      createMap(mapper, CreateDeviceDto, Device);
+      createMap(mapper, CreateDeviceRequestDto, Device);
     };
   }
 }

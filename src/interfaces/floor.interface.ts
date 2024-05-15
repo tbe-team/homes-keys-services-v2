@@ -1,6 +1,6 @@
 import {
   CreateFloorRequestDto,
-  PageOptionsRequest,
+  PageOptionsRequestDto,
   UpdateFloorRequestDto,
 } from '@/dto/request';
 import { FloorReponseDto, PageDto } from '@/dto/response';
@@ -8,7 +8,7 @@ import { IBaseResponse } from './base.interface';
 
 export interface IFloorService {
   getAllFloors(
-    queries: PageOptionsRequest,
+    queries: PageOptionsRequestDto,
   ): Promise<IBaseResponse<PageDto<FloorReponseDto>>>;
 
   getFloorById(id: string): Promise<IBaseResponse<FloorReponseDto>>;

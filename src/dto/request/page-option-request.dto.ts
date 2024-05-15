@@ -3,7 +3,7 @@ import { OrderBy } from '@/enums';
 import { Type } from 'class-transformer';
 import { IsEnum, IsInt, IsOptional, Max, Min } from 'class-validator';
 
-export class PageOptionsRequest {
+export class PageOptionsRequestDto {
   @ApiPropertyOptional({ enum: OrderBy, default: OrderBy.ASC })
   @IsEnum(OrderBy)
   @IsOptional()

@@ -13,7 +13,7 @@ import { HttpStatus } from '@nestjs/common/enums';
 import { RoomService } from '@/services/room.service';
 import {
   CreateRoomRequestDto,
-  PageOptionsRequest,
+  PageOptionsRequestDto,
   UpdateRoomRequestDto,
 } from '@/dto/request';
 import { IBaseResponse } from '@/interfaces';
@@ -30,7 +30,7 @@ export class RoomController {
   @HttpCode(HttpStatus.OK)
   @ApiPaginatedResponse(RoomResponseDto)
   getAllRooms(
-    @Query() queries: PageOptionsRequest,
+    @Query() queries: PageOptionsRequestDto,
   ): Promise<IBaseResponse<PageDto<RoomResponseDto>>> {
     return this.roomServive.getAllRooms(queries);
   }

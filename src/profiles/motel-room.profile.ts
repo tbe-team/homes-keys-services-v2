@@ -2,8 +2,8 @@ import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
 import { createMap, Mapper, typeConverter } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
 import { MotelRoom } from '@/entities';
-import { MotelRoomDto } from '@/dto/response';
 import { CreateMotelRoomRequestDto } from '@/dto/request';
+import { MotelResponseDto } from '@/dto/response';
 const moment = require('moment');
 
 @Injectable()
@@ -21,10 +21,10 @@ export class MotelProfile extends AutomapperProfile {
       createMap(
         mapper,
         MotelRoom,
-        MotelRoomDto,
-        typeConverter(Date, String, (date) => {
-          return moment(date).format('DD/MM/YYYY HH:mm:ss');
-        }),
+        MotelResponseDto,
+        // typeConverter(Date, String, (date) => {
+        //   return moment(date).format('DD/MM/YYYY HH:mm:ss');
+        // }),
       );
     };
   }

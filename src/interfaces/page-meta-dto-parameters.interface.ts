@@ -1,6 +1,6 @@
-import { PageOptionsRequest } from '@/dto/request';
+import { PageOptionsRequestDto } from '@/dto/request';
 
 export interface IPageMetaDtoParameters {
-  pageOptions: PageOptionsRequest;
+  pageOptions: PageOptionsRequestDto;
   itemCount: number;
 }

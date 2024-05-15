@@ -1,6 +1,6 @@
 import {
   CreateRoomRequestDto,
-  PageOptionsRequest,
+  PageOptionsRequestDto,
   UpdateRoomRequestDto,
 } from '@/dto/request';
 import { PageDto, RoomResponseDto } from '@/dto/response';
@@ -17,7 +17,7 @@ export interface IRoomService {
   deleteRoom(id: string): Promise<IBaseResponse<void>>;
 
   getAllRooms(
-    queries: PageOptionsRequest,
+    queries: PageOptionsRequestDto,
   ): Promise<IBaseResponse<PageDto<RoomResponseDto>>>;
 
   getRoomById(id: string): Promise<IBaseResponse<RoomResponseDto>>;

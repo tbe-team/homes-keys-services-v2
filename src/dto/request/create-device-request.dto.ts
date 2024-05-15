@@ -1,6 +1,6 @@
 import { AutoMap } from '@automapper/classes';
 
-export class CreateDeviceDto {
+export class CreateDeviceRequestDto {
   @AutoMap()
   name: string;
 

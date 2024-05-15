@@ -1,34 +1,36 @@
-import { IsNumber, IsNotEmpty } from 'class-validator';
 import { AutoMap } from '@automapper/classes';
 import { ApiProperty } from '@nestjs/swagger';
+import { FloorReponseDto } from './floor-response.dto';
 
-export class CreateMotelRoomRequestDto {
-  @IsNumber()
+export class MotelResponseDto {
+  @AutoMap()
+  @ApiProperty()
+  id: string;
+
   @AutoMap()
   @ApiProperty()
   minPrice: number;
 
-  @IsNumber()
   @AutoMap()
   @ApiProperty()
   maxPrice: number;
 
-  @IsNotEmpty()
   @AutoMap()
   @ApiProperty()
   contactPhone: string;
 
-  @IsNumber()
   @AutoMap()
   @ApiProperty()
   price: number;
 
-  @IsNotEmpty()
   @AutoMap()
   @ApiProperty()
   name: string;
 
   @AutoMap()
-  @ApiProperty()
   description: string;
+
+  @ApiProperty()
+  @AutoMap()
+  floor: FloorReponseDto[];
 }
