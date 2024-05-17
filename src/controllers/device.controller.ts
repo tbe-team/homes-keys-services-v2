@@ -20,7 +20,7 @@ import {
 } from '@/dto/request';
 import { ApiTags, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { HttpStatus } from '@nestjs/common/enums';
-import { ApiPaginatedResponse } from '@/decorators';
+import { ApiPaginatedResponse, Public } from '@/decorators';
 import { SyncDeviceOptionRequest } from '@/dto/request';
 
 @Controller('/devices')

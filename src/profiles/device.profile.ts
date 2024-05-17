@@ -1,16 +1,8 @@
 import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
-import {
-  createMap,
-  extend,
-  forMember,
-  forSelf,
-  Mapper,
-  mapWith,
-  typeConverter,
-} from '@automapper/core';
+import { createMap, extend, Mapper, typeConverter } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
-import { Base, Device, Room } from '@/entities';
-import { BaseResponseDto, DeviceDto, RoomResponseDto } from '@/dto/response';
+import { Base, Device } from '@/entities';
+import { BaseResponseDto, DeviceDto } from '@/dto/response';
 import { CreateDeviceRequestDto } from '@/dto/request';
 const moment = require('moment');
 

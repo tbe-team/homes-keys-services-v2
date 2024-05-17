@@ -5,7 +5,7 @@ import { MotelRoom } from './motel-room.entity';
 
 @Entity()
 export class User extends Base {
-  @Column()
+  @Column({ nullable: true })
   @AutoMap()
   dob: string;
 
@@ -26,15 +26,16 @@ export class User extends Base {
   email: string;
 
   @Column()
+  @AutoMap()
   password: string;
 
   @Column()
   @AutoMap()
-  isVerified: boolean;
+  isVerified?: boolean = false;
 
   @Column()
   @AutoMap()
-  isActived: boolean;
+  isActived?: boolean = false;
 
   @OneToMany((type) => MotelRoom, (motel) => motel.owner)
   @AutoMap()
