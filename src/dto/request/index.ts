@@ -7,3 +7,5 @@ export * from './create-room-request.dto';
 export * from './update-room-request.dto';
 export * from './page-option-request.dto';
 export * from './sync-device-option-request';
+export * from './get-data-start-to-end-option-request';
+export * from './update-motel-request.dto';

@@ -1,9 +1,9 @@
 import { AutoMap } from '@automapper/classes';
 import { RoomResponseDto } from './room-response.dto';
-import { ApiProperty, ApiExtraModels } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
+import { BaseResponseDto } from './base-response.dto';
 
-// @ApiExtraModels(DeviceDto)
-export class DeviceDto {
+export class DeviceDto extends BaseResponseDto {
   @ApiProperty()
   @AutoMap()
   id: string;

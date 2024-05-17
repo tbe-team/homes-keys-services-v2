@@ -13,11 +13,12 @@ import { DeviceService } from '@/services/device.service';
 import { DeviceDto, PageDto } from '@/dto/response';
 import { IBaseResponse, IDataResponse } from '@/interfaces';
 import {
-  CreateDeviceDto,
-  PageOptionsRequest,
-  UpdateDeviceDto,
+  CreateDeviceRequestDto,
+  GetDataStartToEndOptionRequest,
+  PageOptionsRequestDto,
+  UpdateDeviceRequestDto,
 } from '@/dto/request';
-import { ApiTags, ApiResponse, ApiParam, getSchemaPath } from '@nestjs/swagger';
+import { ApiTags, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { HttpStatus } from '@nestjs/common/enums';
 import { ApiPaginatedResponse } from '@/decorators';
 import { SyncDeviceOptionRequest } from '@/dto/request';
@@ -31,7 +32,7 @@ export class DeviceController {
   @HttpCode(HttpStatus.OK)
   @ApiPaginatedResponse(DeviceDto)
   async getAllDevices(
-    @Query() pageOptionsRequest: PageOptionsRequest,
+    @Query() pageOptionsRequest: PageOptionsRequestDto,
   ): Promise<IBaseResponse<PageDto<DeviceDto>>> {
     return this.deviceService.getAllDevices(pageOptionsRequest);
   }
@@ -40,7 +41,7 @@ export class DeviceController {
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
-    description: 'Sync device by location successfully',
+    description: 'Sync device by tags successfully',
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
@@ -71,28 +72,21 @@ export class DeviceController {
   @HttpCode(HttpStatus.OK)
   async getDataFromStartDateToEndDate(
     @Param() params: { id: string },
-    @Query('startDate') startDate: string,
-    @Query('endDate') endDate: string,
-    @Query('intervalType') intervalType: string,
+    @Query() queries: GetDataStartToEndOptionRequest,
   ): Promise<IBaseResponse<IDataResponse[]>> {
-    return this.deviceService.getDataFromStartDateToEndDate(
-      params.id,
-      startDate,
-      endDate,
-      intervalType,
-    );
+    return this.deviceService.getDataFromStartDateToEndDate(params.id, queries);
   }
 
   // Create new device
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async createDevice(@Body() requestData: CreateDeviceDto) {
+  async createDevice(@Body() requestData: CreateDeviceRequestDto) {
     return this.deviceService.createDevice(requestData);
   }
 
   @Put()
   @HttpCode(HttpStatus.OK)
-  async updateDevice(@Body() requestData: UpdateDeviceDto) {
+  async updateDevice(@Body() requestData: UpdateDeviceRequestDto) {
     return this.deviceService.updateDevice(requestData);
   }
 

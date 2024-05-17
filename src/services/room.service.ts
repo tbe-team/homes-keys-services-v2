@@ -1,6 +1,6 @@
 import {
   CreateRoomRequestDto,
-  PageOptionsRequest,
+  PageOptionsRequestDto,
   UpdateRoomRequestDto,
 } from '@/dto/request';
 import { PageDto, PageMetaDto, RoomResponseDto } from '@/dto/response';
@@ -88,7 +88,7 @@ export class RoomService implements IRoomService {
   }
 
   async getAllRooms(
-    queries: PageOptionsRequest,
+    queries: PageOptionsRequestDto,
   ): Promise<IBaseResponse<PageDto<RoomResponseDto>>> {
     try {
       const queryBuilder = this.roomRepository.createQueryBuilder('room');

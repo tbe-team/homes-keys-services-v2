@@ -1,15 +1,16 @@
 import {
-  CreateDeviceDto,
-  PageOptionsRequest,
+  CreateDeviceRequestDto,
+  GetDataStartToEndOptionRequest,
+  PageOptionsRequestDto,
   SyncDeviceOptionRequest,
-  UpdateDeviceDto,
+  UpdateDeviceRequestDto,
 } from '@/dto/request';
 import { DeviceDto, PageDto } from '@/dto/response';
 import { IBaseResponse } from './base.interface';
 
 export interface IDeviceService {
   getAllDevices(
-    pageOptionsRequest: PageOptionsRequest,
+    pageOptionsRequest: PageOptionsRequestDto,
   ): Promise<IBaseResponse<PageDto<DeviceDto>>>;
 
   syncDevices(
@@ -18,14 +19,16 @@ export interface IDeviceService {
 
   getDataFromStartDateToEndDate(
     id: string,
-    startDate: string,
-    endDate: string,
-    intervalType: string,
+    queries: GetDataStartToEndOptionRequest,
   ): Promise<IBaseResponse<IDataResponse[]>>;
 
-  createDevice(requestData: CreateDeviceDto): Promise<IBaseResponse<void>>;
+  createDevice(
+    requestData: CreateDeviceRequestDto,
+  ): Promise<IBaseResponse<void>>;
 
-  updateDevice(requestData: UpdateDeviceDto): Promise<IBaseResponse<void>>;
+  updateDevice(
+    requestData: UpdateDeviceRequestDto,
+  ): Promise<IBaseResponse<void>>;
 
   deleteDevice(id: string): Promise<IBaseResponse<void>>;
 

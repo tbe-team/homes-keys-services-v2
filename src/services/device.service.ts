@@ -7,7 +7,7 @@ import { Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { BadRequestException } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
-import { firstValueFrom, Observable } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { AxiosError, AxiosResponse } from 'axios';
 import { HttpStatus } from '@nestjs/common/enums';
 import { DeviceStatus, DeviceType } from '@/enums';
@@ -15,10 +15,11 @@ import { Logger } from '@nestjs/common/services';
 import { ConfigService } from '@nestjs/config';
 import { IBaseResponse, IDataResponse, IDeviceService } from '@/interfaces';
 import {
-  CreateDeviceDto,
-  PageOptionsRequest,
+  CreateDeviceRequestDto,
+  GetDataStartToEndOptionRequest,
+  PageOptionsRequestDto,
   SyncDeviceOptionRequest,
-  UpdateDeviceDto,
+  UpdateDeviceRequestDto,
 } from '@/dto/request';
 import { NotFoundException } from '@nestjs/common/exceptions';
 
@@ -66,7 +67,7 @@ export class DeviceService implements IDeviceService {
   }
 
   async updateDevice(
-    requestData: UpdateDeviceDto,
+    requestData: UpdateDeviceRequestDto,
   ): Promise<IBaseResponse<void>> {
     const device = await this.deviceRepository.findOne({
       where: { id: requestData.id },
@@ -98,7 +99,7 @@ export class DeviceService implements IDeviceService {
   }
 
   async createDevice(
-    requestData: CreateDeviceDto,
+    requestData: CreateDeviceRequestDto,
   ): Promise<IBaseResponse<void>> {
     // Get room
     const room = await this.roomRepository.findOne({
@@ -109,7 +110,7 @@ export class DeviceService implements IDeviceService {
     // Map request to entity
     const device = await this.mapper.mapAsync(
       requestData,
-      CreateDeviceDto,
+      CreateDeviceRequestDto,
       Device,
     );
     device.room = room;
@@ -128,18 +129,20 @@ export class DeviceService implements IDeviceService {
 
   async getDataFromStartDateToEndDate(
     id: string,
-    startDate: string,
-    endDate: string,
-    intervalType: string,
+    queries: GetDataStartToEndOptionRequest,
   ): Promise<IBaseResponse<IDataResponse[]>> {
     const key = encodeURIComponent('Total kWh');
     const interval = 1;
     const aggType = 'MAX';
     const limit = 100;
-    const formatedStartDate = encodeURIComponent(`${startDate}T00:00:00+07:00`);
-    const formatedEndDate = encodeURIComponent(`${endDate}T23:59:59+07:00`);
+    const formatedStartDate = encodeURIComponent(
+      `${queries.startDate}T00:00:00+07:00`,
+    );
+    const formatedEndDate = encodeURIComponent(
+      `${queries.endDate}T23:59:59+07:00`,
+    );
 
-    const requestUrl = `${this.tbeBaseUrl}/telemetry/metrics/values?device_id=${id}&key=${key}&start=${formatedStartDate}&end=${formatedEndDate}&interval_type=${intervalType}&interval=${interval}&agg_type=${aggType}&limit=${limit}`;
+    const requestUrl = `${this.tbeBaseUrl}/telemetry/metrics/values?device_id=${id}&key=${key}&start=${formatedStartDate}&end=${formatedEndDate}&interval_type=${queries.intervalType}&interval=${interval}&agg_type=${aggType}&limit=${limit}`;
     this.logger.log({ requestUrl });
 
     try {
@@ -164,7 +167,7 @@ export class DeviceService implements IDeviceService {
   }
 
   async getAllDevices(
-    pageOptionsRequest: PageOptionsRequest,
+    pageOptionsRequest: PageOptionsRequestDto,
   ): Promise<IBaseResponse<PageDto<DeviceDto>>> {
     try {
       const queryBuilder = this.deviceRepository.createQueryBuilder('device');

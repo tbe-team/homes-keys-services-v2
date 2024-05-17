@@ -1,7 +1,7 @@
 import { ApiPaginatedResponse } from '@/decorators';
 import {
   CreateFloorRequestDto,
-  PageOptionsRequest,
+  PageOptionsRequestDto,
   UpdateFloorRequestDto,
 } from '@/dto/request';
 import { FloorReponseDto, PageDto } from '@/dto/response';
@@ -29,7 +29,7 @@ export class FloorController {
   @HttpCode(HttpStatus.OK)
   @ApiPaginatedResponse(FloorReponseDto)
   async getAllFloors(
-    @Query() queries: PageOptionsRequest,
+    @Query() queries: PageOptionsRequestDto,
   ): Promise<IBaseResponse<PageDto<FloorReponseDto>>> {
     return this.floorService.getAllFloors(queries);
   }

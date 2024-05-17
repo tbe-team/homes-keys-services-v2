@@ -1,6 +1,4 @@
-import { AutoMap } from '@automapper/classes';
-
-export class UpdateDeviceDto {
+export class UpdateDeviceRequestDto {
   id: string;
 
   name: string;

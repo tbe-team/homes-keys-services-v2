@@ -15,7 +15,7 @@ import { Logger } from '@nestjs/common/services';
 import { HttpStatus } from '@nestjs/common/enums';
 import {
   CreateFloorRequestDto,
-  PageOptionsRequest,
+  PageOptionsRequestDto,
   UpdateFloorRequestDto,
 } from '@/dto/request';
 import {
@@ -84,7 +84,7 @@ export class FloorService implements IFloorService {
   }
 
   async getAllFloors(
-    queries: PageOptionsRequest,
+    queries: PageOptionsRequestDto,
   ): Promise<IBaseResponse<PageDto<FloorReponseDto>>> {
     try {
       const queryBuilder = this.floorRepository.createQueryBuilder('floor');
