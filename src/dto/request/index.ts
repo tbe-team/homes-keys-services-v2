@@ -9,3 +9,6 @@ export * from './page-option-request.dto';
 export * from './sync-device-option-request';
 export * from './get-data-start-to-end-option-request';
 export * from './update-motel-request.dto';
+export * from './login-request.dto';
+export * from './register-request.dto';
+export * from './create-user-request.dto';

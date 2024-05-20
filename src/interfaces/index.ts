@@ -9,3 +9,4 @@ export * from './floor.interface';
 export * from './task.interface';
 export * from './auth.interface';
 export * from './page-meta-dto-parameters.interface';
+export * from './user.interface';
