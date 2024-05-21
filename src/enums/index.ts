@@ -12,3 +12,11 @@ export enum OrderBy {
   ASC = 'ASC',
   DESC = 'DESC',
 }
+
+export enum Action {
+  Manage = 'manage',
+  Create = 'create',
+  Read = 'read',
+  Update = 'update',
+  Delete = 'delete',
+}

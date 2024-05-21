@@ -11,6 +11,7 @@ import {
   TaskModule,
   UserModule,
   AuthModule,
+  CaslModule,
 } from '@/modules';
 
 @Module({
@@ -26,6 +27,7 @@ import {
     FloorModule,
     UserModule,
     AuthModule,
+    CaslModule,
   ],
 })
 export class AppModule {}

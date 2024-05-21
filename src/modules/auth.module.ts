@@ -7,20 +7,28 @@ import { jwtConstants } from '@/constants';
 import { User } from '@/entities';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthProfile } from '@/profiles';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy, LocalStrategy } from '@/strategies';
 import { APP_GUARD } from '@nestjs/core';
-import { AuthGuard } from '@/guards';
+import { JwtAuthGuard } from '@/guards';
 
 @Module({
   controllers: [AuthController],
   providers: [
+    LocalStrategy,
     AuthService,
     AuthProfile,
-    { provide: APP_GUARD, useClass: AuthGuard },
+    JwtStrategy,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
   ],
   exports: [AuthService],
   imports: [
     UserModule,
     TypeOrmModule.forFeature([User]),
+    PassportModule,
     JwtModule.register({
       global: true,
       secret: jwtConstants.secret,
