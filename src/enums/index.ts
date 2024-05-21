@@ -20,3 +20,9 @@ export enum Action {
   Update = 'update',
   Delete = 'delete',
 }
+
+export enum Role {
+  User = 'user',
+  Host = 'host',
+  Admin = 'admin',
+}

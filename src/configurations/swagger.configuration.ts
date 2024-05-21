@@ -5,4 +5,6 @@ export const swaggerConfiguration = new DocumentBuilder()
   .setDescription('Home Key Service API')
   .setVersion('v2.0.0')
   .addServer('/api/v1.0.0')
+  .addBearerAuth()
+  .addSecurityRequirements('bearer')
   .build();

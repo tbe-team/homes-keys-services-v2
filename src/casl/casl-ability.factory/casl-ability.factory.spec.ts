@@ -1,4 +1,4 @@
-import { CaslAbilityFactory } from './casl-ability.factory';
+import { CaslAbilityFactory } from '@/factories';
 
 describe('CaslAbilityFactory', () => {
   it('should be defined', () => {

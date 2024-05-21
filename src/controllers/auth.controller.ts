@@ -28,14 +28,14 @@ export class AuthController {
   @Get('/test')
   @HttpCode(HttpStatus.OK)
   getTest(@Request() req: any) {
-    return req.user;
+    return 'hello';
   }
 
   @Post('login')
   @Public()
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
-  @ApiExtraModels(LoginRequestDto)
+  // @ApiExtraModels(LoginRequestDto)
   signInWitPassport(@Request() req: any) {
     return this.authService.login(req.user);
   }
