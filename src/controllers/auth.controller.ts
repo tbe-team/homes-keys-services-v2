@@ -1,5 +1,6 @@
 import { Public } from '@/decorators';
 import { LoginRequestDto, RegisterRequestDto } from '@/dto/request';
+import { LocalAuthGuard } from '@/guards';
 import { AuthService } from '@/services';
 import {
   Body,
@@ -9,19 +10,14 @@ import {
   HttpStatus,
   Post,
   Request,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
 @ApiTags('Auth API')
 export class AuthController {
   constructor(private authService: AuthService) {}
-
-  @HttpCode(HttpStatus.OK)
-  @Post('login')
-  signIn(@Body() signInDto: LoginRequestDto) {
-    return this.authService.signIn(signInDto.phonumber, signInDto.password);
-  }
 
   @Post('register')
   @HttpCode(HttpStatus.OK)
@@ -29,8 +25,18 @@ export class AuthController {
     return this.authService.register(registerDto);
   }
 
-  @Get('profile')
-  getProfile(@Request() req) {
-    return req.user;
+  @Get('/test')
+  @HttpCode(HttpStatus.OK)
+  getTest(@Request() req: any) {
+    return 'hello';
+  }
+
+  @Post('login')
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(LocalAuthGuard)
+  // @ApiExtraModels(LoginRequestDto)
+  signInWitPassport(@Request() req: any) {
+    return this.authService.login(req.user);
   }
 }

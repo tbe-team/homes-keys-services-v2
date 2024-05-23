@@ -40,4 +40,7 @@ export class User extends Base {
   @OneToMany((type) => MotelRoom, (motel) => motel.owner)
   @AutoMap()
   motelRooms: MotelRoom[];
+
+  @Column()
+  isAdmin: boolean;
 }

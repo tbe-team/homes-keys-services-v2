@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import { Controller, Post, Body, Get, UseGuards } from '@nestjs/common';
 import {
   CreateMotelRoomRequestDto,
   PageOptionsRequestDto,
@@ -8,8 +8,13 @@ import { MotelRoomService } from '@/services';
 import { IBaseResponse } from '@/interfaces';
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 import { Delete, Param, Put, Query } from '@nestjs/common/decorators';
-import { ApiPaginatedResponse } from '@/decorators';
+import { ApiPaginatedResponse, CheckPolicies } from '@/decorators';
 import { MotelResponseDto } from '@/dto/response';
+import { PoliciesGuard } from '@/guards';
+import { AppAbility } from '@/factories';
+import { Action } from '@/enums';
+import { MotelRoom } from '@/entities';
+import { ReadMotelPolicyHandler, UpdateMotelPolicyHandler } from '@/handlers';
 
 @Controller('/motels')
 @ApiTags('Motel Room API')
@@ -28,6 +33,8 @@ export class MotelRoomController {
 
   @Get()
   @ApiPaginatedResponse(MotelResponseDto)
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies(ReadMotelPolicyHandler)
   getAllMotels(@Query() queries: PageOptionsRequestDto) {
     return this.motelRoomService.getAllMotels(queries);
   }
@@ -43,6 +50,8 @@ export class MotelRoomController {
   }
 
   @Put('/:id')
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies(UpdateMotelPolicyHandler)
   @ApiParam({ name: 'id', required: true, description: 'Motel id' })
   @ApiOkResponse({
     description: 'Motel updated successfully',

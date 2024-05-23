@@ -21,26 +21,6 @@ export class AuthService implements IAuthService {
     private readonly mapper: Mapper,
   ) {}
 
-  async signIn(
-    phonenumber: string,
-    pass: string,
-  ): Promise<IBaseResponse<LoginResponseDto>> {
-    const user = await this.UserRepository.findOne({ where: { phonenumber } });
-    const isMatch = await bcrypt.compare(pass, user.password);
-    if (!isMatch) {
-      throw new UnauthorizedException();
-    }
-    const payload = { sub: user.id, username: user.email };
-    const accessToken = await this.jwtService.signAsync(payload);
-
-    return {
-      message: 'Login successfully',
-      statusCode: HttpStatus.OK,
-      data: new LoginResponseDto(accessToken),
-      error: false,
-    };
-  }
-
   async register(
     registerDto: RegisterRequestDto,
   ): Promise<IBaseResponse<void>> {
@@ -61,5 +41,28 @@ export class AuthService implements IAuthService {
       statusCode: HttpStatus.CREATED,
     };
     // return this.userService.createUser();
+  }
+
+  async validateUser(username: string, pass: string): Promise<any> {
+    const user = await this.UserRepository.findOne({
+      where: { phonenumber: username },
+    });
+    const isMatch = await bcrypt.compare(pass, user.password);
+    if (!isMatch) {
+      throw new UnauthorizedException();
+    }
+    const { password, ...result } = user;
+    return result;
+  }
+
+  async login(user: any): Promise<IBaseResponse<LoginResponseDto>> {
+    const payload = { sub: user.id, username: user.phonenumber };
+    const accessToken = await this.jwtService.signAsync(payload);
+    return {
+      message: 'User have successfully logged in',
+      statusCode: HttpStatus.OK,
+      data: new LoginResponseDto(accessToken),
+      error: false,
+    };
   }
 }
