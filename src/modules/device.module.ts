@@ -1,13 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { DeviceController, RoomController } from '@/controllers';
+import { DeviceController } from '@/controllers';
 import { Device, Room } from '@/entities';
-import { RoomService } from '@/services';
 import { DeviceService } from '@/services/device.service';
 import { DeviceProfile } from '@/profiles';
 import { HttpModule } from '@nestjs/axios';
-import { RoomModule } from './room.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Device, Room]), HttpModule],

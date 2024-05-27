@@ -1,7 +1,8 @@
 import { AutoMap } from '@automapper/classes';
-import { Entity, Column, OneToMany } from 'typeorm';
+import { Entity, Column, OneToMany, ManyToOne } from 'typeorm';
 import { Base } from './base.entity';
 import { MotelRoom } from './motel-room.entity';
+import { Role } from './role.entity';
 
 @Entity()
 export class User extends Base {
@@ -43,4 +44,8 @@ export class User extends Base {
 
   @Column()
   isAdmin: boolean;
+
+  @ManyToOne(() => Role, (role) => role.user)
+  @AutoMap()
+  role: Role;
 }

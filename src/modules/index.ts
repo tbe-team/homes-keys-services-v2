@@ -10,3 +10,4 @@ export * from './custom-automapper.module';
 export * from './auth.module';
 export * from './user.module';
 export * from './casl.module';
+export * from './role.module';

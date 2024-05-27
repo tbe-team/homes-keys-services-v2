@@ -6,3 +6,4 @@ export * from './base-response.dto';
 export * from './page-meta.response.dto';
 export * from './page.response.dto';
 export * from './login-response.dto';
+export * from './role-response.dto';

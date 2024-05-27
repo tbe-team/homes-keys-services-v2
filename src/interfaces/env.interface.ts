@@ -12,4 +12,6 @@ export interface IEnv {
   tbeBaseUrl: string;
   tbeAccessToken: string;
   database: IDatabase;
+  // env: 'development' | 'production';
+  env: string;
 }

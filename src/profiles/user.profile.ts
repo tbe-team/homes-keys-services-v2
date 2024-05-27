@@ -23,6 +23,7 @@ export class UserProfile extends AutomapperProfile {
         }),
       );
       createMap(mapper, CreateUserRequestDto, User);
+      // createMap(mapper, User, );
     };
   }
 }

@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 export class LoginRequestDto {
   @AutoMap()
   @ApiProperty()
-  phonumber: string;
+  username: string;
 
   @AutoMap()
   @ApiProperty()

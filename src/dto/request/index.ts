@@ -12,3 +12,5 @@ export * from './update-motel-request.dto';
 export * from './login-request.dto';
 export * from './register-request.dto';
 export * from './create-user-request.dto';
+export * from './create-role-request.dto';
+export * from './update-role-request.dto';

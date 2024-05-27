@@ -10,7 +10,9 @@ import { SwaggerModule } from '@nestjs/swagger';
 import { swaggerConfiguration } from '@/configurations';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    snapshot: true,
+  });
   const configService = app.get(ConfigService);
   const port = configService.get<number>('port');
   const version = configService.get<string>('version');

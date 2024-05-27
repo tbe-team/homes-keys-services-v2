@@ -4,3 +4,4 @@ export * from './room.profile';
 export * from './floor.profile';
 export * from './user.profile';
 export * from './auth.profile';
+export * from './role.profile';

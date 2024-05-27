@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { Device, Floor, MotelRoom, Room, User } from '@/entities';
+// import { Device, Floor, MotelRoom, Room, User, Role } from '@/entities';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -16,8 +17,12 @@ import { Device, Floor, MotelRoom, Room, User } from '@/entities';
         password: configService.get<string>('DATABASE_PASSWORD'),
         database: configService.get<string>('DATABASE_NAME'),
         // entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        entities: [Room, Device, Floor, MotelRoom, User],
-        synchronize: true,
+        // entities: [Room, Device, Floor, MotelRoom, User, Role],
+        // Get all entities from @/src/entities
+        entities: [
+          join(__dirname, '..', 'entities', '**', '*.entity{.ts,.js}'),
+        ],
+        synchronize: configService.get<string>('ENV') !== 'production',
       }),
       inject: [ConfigService],
     }),
