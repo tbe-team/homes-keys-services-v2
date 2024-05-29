@@ -1,17 +1,13 @@
 import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
 import { createMap, extend, Mapper, typeConverter } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
-import { Base, Floor, Room } from '@/entities';
-import {
-  BaseResponseDto,
-  FloorReponseDto,
-  RoomResponseDto,
-} from '@/dto/response';
-import { CreateFloorRequestDto } from '@/dto/request';
+import { Base, Role, User } from '@/entities';
+import { BaseResponseDto, RoleResponseDto } from '@/dto/response';
+import { CreateRoleRequestDto, CreateUserRequestDto } from '@/dto/request';
 const moment = require('moment');
 
 @Injectable()
-export class FloorProfile extends AutomapperProfile {
+export class RoleProfile extends AutomapperProfile {
   constructor(@InjectMapper() mapper: Mapper) {
     super(mapper);
   }
@@ -26,9 +22,8 @@ export class FloorProfile extends AutomapperProfile {
           return moment(date).format('DD/MM/YYYY HH:mm:ss');
         }),
       );
-      createMap(mapper, Floor, FloorReponseDto, extend(baseMapping));
-      createMap(mapper, CreateFloorRequestDto, Floor);
-      // createMap(mapper, Room, RoomResponseDto);
+      createMap(mapper, Role, RoleResponseDto, extend(baseMapping));
+      createMap(mapper, CreateRoleRequestDto, Role);
     };
   }
 }

@@ -1,7 +1,7 @@
-import { Entity, Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { AutoMap } from '@automapper/classes';
-import { Room } from './room.entity';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { Base } from './base.entity';
+import { Room } from './room.entity';
 
 @Entity()
 export class Device extends Base {

@@ -5,14 +5,13 @@ import { AuthService } from '@/services';
 import {
   Body,
   Controller,
-  Get,
   HttpCode,
   HttpStatus,
   Post,
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
 @ApiTags('Auth API')
@@ -25,17 +24,11 @@ export class AuthController {
     return this.authService.register(registerDto);
   }
 
-  @Get('/test')
-  @HttpCode(HttpStatus.OK)
-  getTest(@Request() req: any) {
-    return 'hello';
-  }
-
   @Post('login')
   @Public()
   @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
-  // @ApiExtraModels(LoginRequestDto)
+  @ApiBody({ type: LoginRequestDto })
   signInWitPassport(@Request() req: any) {
     return this.authService.login(req.user);
   }

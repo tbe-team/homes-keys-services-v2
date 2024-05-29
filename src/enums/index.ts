@@ -22,7 +22,7 @@ export enum Action {
 }
 
 export enum Role {
-  User = 'user',
-  Host = 'host',
-  Admin = 'admin',
+  User = 'ROLE_USER',
+  Host = 'ROLE_HOST',
+  Admin = 'ROLE_ADMIN',
 }

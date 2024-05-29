@@ -12,7 +12,9 @@ import {
   UserModule,
   AuthModule,
   CaslModule,
+  RoleModule,
 } from '@/modules';
+import { DevtoolsModule } from '@nestjs/devtools-integration';
 
 @Module({
   imports: [
@@ -28,6 +30,10 @@ import {
     UserModule,
     AuthModule,
     CaslModule,
+    DevtoolsModule.register({
+      http: process.env.NODE_ENV !== 'production',
+    }),
+    RoleModule,
   ],
 })
 export class AppModule {}

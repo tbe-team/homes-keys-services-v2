@@ -11,9 +11,6 @@ import { Delete, Param, Put, Query } from '@nestjs/common/decorators';
 import { ApiPaginatedResponse, CheckPolicies } from '@/decorators';
 import { MotelResponseDto } from '@/dto/response';
 import { PoliciesGuard } from '@/guards';
-import { AppAbility } from '@/factories';
-import { Action } from '@/enums';
-import { MotelRoom } from '@/entities';
 import { ReadMotelPolicyHandler, UpdateMotelPolicyHandler } from '@/handlers';
 
 @Controller('/motels')

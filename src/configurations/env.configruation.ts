@@ -5,6 +5,7 @@ export const envConfiguration = (): IEnv => ({
   version: process.env.APP_VERSION,
   tbeBaseUrl: process.env.TBE_BASE_URL,
   tbeAccessToken: process.env.TBE_ACCESS_TOKEN,
+  env: process.env.ENV || 'development',
   database: {
     host: process.env.MYSQL_HOST || 'localhost',
     port: Number.parseInt(process.env.MYSQL_PORT) || 3306,

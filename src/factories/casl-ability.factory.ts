@@ -1,5 +1,5 @@
 import { MotelRoom, User } from '@/entities';
-import { Action } from '@/enums';
+import { Action, Role } from '@/enums';
 import {
   InferSubjects,
   AbilityBuilder,
@@ -19,15 +19,25 @@ export class CaslAbilityFactory {
     const { can, cannot, build } = new AbilityBuilder<
       PureAbility<[Action, Subjects]>
     >(PureAbility as unknown as AbilityClass<AppAbility>);
-    console.log({ user });
-    if (user.isAdmin) {
-      can(Action.Manage, 'all'); // read-write access to everything
-    } else {
-      can(Action.Read, 'all'); // read-only access to everything
-    }
 
-    cannot(Action.Update, 'all');
-    cannot(Action.Delete, 'all');
+    switch (user.role.roleName) {
+      case Role.Admin:
+        can(Action.Manage, 'all'); // read-write access to everything
+        break;
+      case Role.Host:
+        can(Action.Create, 'all');
+        can(Action.Update, 'all');
+        cannot(Action.Delete, 'all');
+        break;
+      case Role.User:
+        can(Action.Create, 'all');
+        cannot(Action.Update, 'all');
+        cannot(Action.Delete, 'all');
+        break;
+      default:
+        cannot(Action.Manage, 'all'); // can not access to everything
+        break;
+    }
 
     return build({
       // Read https://casl.js.org/v6/en/guide/subject-type-detection#use-classes-as-subject-types for details
