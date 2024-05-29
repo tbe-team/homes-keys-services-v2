@@ -5,7 +5,6 @@ import { AuthService } from '@/services';
 import {
   Body,
   Controller,
-  Get,
   HttpCode,
   HttpStatus,
   Post,

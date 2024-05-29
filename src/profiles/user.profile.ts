@@ -1,9 +1,21 @@
+import { CreateUserRequestDto } from '@/dto/request';
+import {
+  BaseResponseDto,
+  MotelResponseDto,
+  RoleResponseDto,
+  UserResponseDto,
+} from '@/dto/response';
+import { Base, MotelRoom, Role, User } from '@/entities';
+import {
+  createMap,
+  extend,
+  forMember,
+  mapFrom,
+  Mapper,
+  typeConverter,
+} from '@automapper/core';
 import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
-import { createMap, extend, Mapper, typeConverter } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
-import { Base, Device, User } from '@/entities';
-import { BaseResponseDto, DeviceDto } from '@/dto/response';
-import { CreateDeviceRequestDto, CreateUserRequestDto } from '@/dto/request';
 const moment = require('moment');
 
 @Injectable()
@@ -23,7 +35,22 @@ export class UserProfile extends AutomapperProfile {
         }),
       );
       createMap(mapper, CreateUserRequestDto, User);
-      // createMap(mapper, User, );
+      createMap(
+        mapper,
+        User,
+        UserResponseDto,
+        extend(baseMapping),
+        forMember(
+          (dest) => dest.motelRooms,
+          mapFrom((src) =>
+            mapper.mapArray(src.motelRooms, MotelRoom, MotelResponseDto),
+          ),
+        ),
+        forMember(
+          (dest) => dest.role,
+          mapFrom((src) => mapper.map(src.role, Role, RoleResponseDto)),
+        ),
+      );
     };
   }
 }
