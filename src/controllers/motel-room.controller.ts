@@ -30,8 +30,8 @@ export class MotelRoomController {
 
   @Get()
   @ApiPaginatedResponse(MotelResponseDto)
-  @UseGuards(PoliciesGuard)
-  @CheckPolicies(ReadMotelPolicyHandler)
+  // @UseGuards(PoliciesGuard)
+  // @CheckPolicies(ReadMotelPolicyHandler)
   getAllMotels(@Query() queries: PageOptionsRequestDto) {
     return this.motelRoomService.getAllMotels(queries);
   }

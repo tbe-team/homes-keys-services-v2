@@ -3,6 +3,8 @@ import { Entity, Column, OneToMany, ManyToOne } from 'typeorm';
 import { Base } from './base.entity';
 import { Device } from './device.entity';
 import { Floor } from './floor.entity';
+import { Contract } from './contract.entity';
+import { Bill } from './bill.entity';
 
 @Entity()
 export class Room extends Base {
@@ -36,4 +38,12 @@ export class Room extends Base {
   @ManyToOne(() => Floor, (floor) => floor.rooms)
   @AutoMap()
   floor: Floor;
+
+  @OneToMany(() => Contract, (contract) => contract.room)
+  @AutoMap(() => [Contract])
+  contracts: Contract[];
+
+  @OneToMany(() => Bill, (bill) => bill.room)
+  @AutoMap(() => [Bill])
+  bills: Bill[];
 }

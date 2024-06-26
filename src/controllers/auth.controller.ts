@@ -19,6 +19,7 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('register')
+  @Public()
   @HttpCode(HttpStatus.OK)
   register(@Body() registerDto: RegisterRequestDto) {
     return this.authService.register(registerDto);

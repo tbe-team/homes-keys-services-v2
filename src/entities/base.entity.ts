@@ -1,5 +1,6 @@
 import { AutoMap } from '@automapper/classes';
 import {
+  Column,
   CreateDateColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -17,4 +18,8 @@ export class Base {
   @AutoMap()
   @UpdateDateColumn()
   updatedAt: Date; // Last updated date
+
+  @Column({default: false})
+  @AutoMap()
+  isDeleted: boolean;
 }
